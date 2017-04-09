@@ -1,8 +1,11 @@
 import React, { Component } from 'react';
-import logo from '../../assets/img/logo.svg';
+import logo from '../../../assets/img/logo.svg';
 import './App.css';
 import cm from './App.module.styl';
-console.log('>>>>', cm)
+import Nav from 'containers/Nav';
+import History from 'containers/History'
+
+
 class App extends Component {
   render() {
     return (
@@ -15,6 +18,10 @@ class App extends Component {
           To get started, edit <code>src/App.js</code> and save to reload.
           <span className={cm.textDanger}>Red Text</span>
         </p>
+        <div>
+          <Nav />
+          <History />
+        </div>
       </div>
     );
   }
