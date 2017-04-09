@@ -1,4 +1,4 @@
-'use strict';
+
 
 var autoprefixer = require('autoprefixer');
 var webpack = require('webpack');
@@ -8,6 +8,17 @@ var InterpolateHtmlPlugin = require('react-dev-utils/InterpolateHtmlPlugin');
 var WatchMissingNodeModulesPlugin = require('react-dev-utils/WatchMissingNodeModulesPlugin');
 var getClientEnvironment = require('./env');
 var paths = require('./paths');
+
+const styleLoaders = (isDev) => ({
+  css: `css-loader!postcss`,
+  get stylus() {
+    return `${this.css}!stylus?include css&resolve url`
+  },
+  mCss: `css-loader?modules&importLoaders=1${isDev ? '&localIdentName=[folder]-[local]-[hash:base64:5]' : ''}!postcss`,
+  get stylusWithModules() {
+    return `${this.mCss}!stylus?include css&resolve url` // !stylint
+  },
+})
 
 
 
@@ -81,7 +92,7 @@ module.exports = {
       'react-native': 'react-native-web'
     }
   },
-  
+
   module: {
     // First, run the linter.
     // It's important to do this before Babel processes the JS.
@@ -113,7 +124,8 @@ module.exports = {
           /\.(js|jsx)(\?.*)?$/,
           /\.css$/,
           /\.json$/,
-          /\.svg$/
+          /\.svg$/,
+          /\.styl$/,
         ],
         loader: 'url',
         query: {
@@ -127,7 +139,7 @@ module.exports = {
         include: paths.appSrc,
         loader: 'babel',
         query: {
-          
+
           // This is a feature of `babel-loader` for webpack (not Babel itself).
           // It enables caching results in ./node_modules/.cache/babel-loader/
           // directory for faster rebuilds.
@@ -142,6 +154,15 @@ module.exports = {
       {
         test: /\.css$/,
         loader: 'style!css?importLoaders=1!postcss'
+      },
+      {
+        test: /\.styl$/,
+        exclude: /module\.styl$/,
+        loader: `style!${styleLoaders(true).stylus}`
+      },
+      {
+        test: /module\.styl$/,
+        loader: `style!${styleLoaders(true).stylusWithModules}`
       },
       // JSON is not enabled by default in Webpack but both Node and Browserify
       // allow it implicitly so we also enable it.
@@ -161,9 +182,9 @@ module.exports = {
       // Remember to add the new extension(s) to the "url" loader exclusion list.
     ]
   },
-  
+
   // We use PostCSS for autoprefixing only.
-  postcss: function() {
+  postcss: function () {
     return [
       autoprefixer({
         browsers: [
