@@ -1,2 +1,1 @@
-import c from './App';
-export default c;
+export default from './App.js'

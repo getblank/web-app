@@ -1,2 +1,1 @@
-import c from './NavContainer'
-export default c
+export default from './NavContainer.js'

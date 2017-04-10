@@ -1,2 +1,1 @@
-import c from './Nav'
-export default c
+export default from './Nav.js'

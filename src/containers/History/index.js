@@ -1,2 +1,1 @@
-import c from './HistoryContainer'
-export default c
+export default from './HistoryContainer.js'
